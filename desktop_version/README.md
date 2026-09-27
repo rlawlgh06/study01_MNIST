@@ -1,5 +1,7 @@
 # 손글씨 숫자 인식기 (MNIST + PyTorch)
 
+> 브라우저에서 돌아가는 웹 버전은 `../web_version/` 에 있습니다.
+
 마우스로 직접 숫자를 써서 입력하면, 학습된 CNN 모델이 그 숫자가 0~9 중 무엇인지 인식합니다.
 
 ## 파일 구성
@@ -18,23 +20,26 @@
 ## 준비
 
 ```bash
-pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision
+py -m pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision
 ```
+
+> **`python` 이 아니라 `py` 를 쓰세요.** 이 PC의 `python` 은 Microsoft Store 스텁이라
+> torch 가 설치되어 있지 않습니다.
 
 ## 1) 학습하기
 
 ```bash
-python train.py
+py train.py
 ```
 
 - 기본 3 에폭 학습하며, 매 에폭마다 평가 정확도를 출력합니다.
 - 학습이 끝나면 `mnist_cnn.pt` 파일이 만들어집니다.
-- 에폭 수를 바꾸려면: `python train.py --에폭 5`
+- 에폭 수를 바꾸려면: `py train.py --에폭 5`
 
 ## 2) 손글씨로 인식하기
 
 ```bash
-python draw_predict.py
+py draw_predict.py
 ```
 
 - 왼쪽 그림판에 마우스를 끌어 숫자 하나를 **크게** 씁니다.
@@ -44,7 +49,7 @@ python draw_predict.py
 ## 3) 바탕 화면 바로가기 만들기
 
 ```powershell
-python 아이콘_만들기.py                                        # 아이콘.ico 생성
+py 아이콘_만들기.py                                             # 아이콘.ico 생성
 powershell -ExecutionPolicy Bypass -File .\바로가기_만들기.ps1   # 바로가기 생성
 ```
 
