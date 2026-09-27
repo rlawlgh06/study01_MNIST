@@ -34,6 +34,8 @@ body {
 }
 
 .머리 { max-width: 720px; margin: 0 auto 20px; }
+/* `.머리 p` 보다 명시도가 높아야 색·크기를 덮어씁니다. */
+.머리 .학번 { margin: 0 0 8px; font-size: 1rem; font-weight: 700; color: var(--글자색); }
 .머리 h1 { font-size: 1.5rem; margin: 0 0 4px; }
 .머리 p { margin: 0; color: var(--흐린글자); font-size: .92rem; }
 .머리 a { color: var(--주색); }
