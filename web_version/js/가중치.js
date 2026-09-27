@@ -87,6 +87,20 @@ export async function 가중치_불러오기(기준경로 = 'model/') {
         `기대 [${기대}], 실제 [${항목.모양}]`,
         'desktop_version/model.py 와 web_version/js/모델.js 의 구조가 갈렸습니다.');
     }
+    const 기대개수 = 기대.reduce((곱, 길이) => 곱 * 길이, 1);
+    if (항목.개수 !== 기대개수) {
+      throw new 가중치오류(
+        `${항목.이름} 의 개수가 모양과 맞지 않습니다. ` +
+        `기대 ${기대개수.toLocaleString()}, 실제 ${항목.개수.toLocaleString()}`,
+        내보내기_안내);
+    }
+    if (항목.시작 + 항목.개수 > 전체.length) {
+      throw new 가중치오류(
+        `${항목.이름} 의 시작 위치가 파일 범위를 벗어납니다. ` +
+        `기대 ${(항목.시작 + 항목.개수).toLocaleString()} 이하, ` +
+        `실제 전체 길이 ${전체.length.toLocaleString()}`,
+        내보내기_안내);
+    }
     텐서[항목.이름] = 전체.subarray(항목.시작, 항목.시작 + 항목.개수);
   }
 
