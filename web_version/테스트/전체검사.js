@@ -9,14 +9,15 @@
 import * as 검사틀검사 from './검사틀_검사.js';
 import * as 리샘플검사 from './리샘플_검사.js';
 import * as 전처리검사 from './전처리_검사.js';
+import * as 가중치검사 from './가중치_검사.js';
 
 export async function 전체검사_실행(고정표본, 텐서 = null) {
   const 모음들 = [
     검사틀검사.만들기(),
     리샘플검사.만들기(고정표본),
     전처리검사.만들기(고정표본),
+    가중치검사.만들기(텐서),
   ];
-  void 텐서;
 
   const 결과들 = [];
   for (const 모음 of 모음들) {
