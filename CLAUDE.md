@@ -18,7 +18,8 @@
 | `python` | Microsoft Store 스텁 | ❌ 없음 |
 | `py` | `Python314\python.exe` | ✅ 있음 (torch 2.14, Pillow 12.3, torchvision 0.29) |
 
-`python train.py` 는 `ModuleNotFoundError` 로 실패합니다. 항상 `py train.py` 를 쓰세요.
+`python desktop_version/train.py` 는 `ModuleNotFoundError` 로 실패합니다.
+항상 `py desktop_version/train.py` 를 쓰세요.
 
 ## 가중치가 흘러가는 길
 
@@ -39,7 +40,8 @@ web_version/model/weights.bin + weights.json   (float32 덩어리 + 설명, 4.6M
 3. `web_version/js/가중치.js` — `기대하는_모양`
 4. `web_version/js/모델.js` — 순전파
 
-그리고 `py train.py` 로 재학습 → `py tools/가중치_내보내기.py` → `py tools/고정표본_만들기.py`
+그리고(모두 저장소 루트 기준 경로) `py desktop_version/train.py` 로 재학습 →
+`py web_version/tools/가중치_내보내기.py` → `py web_version/tools/고정표본_만들기.py`
 순으로 다시 돌려야 합니다.
 
 ## 전처리는 양쪽이 반드시 같아야 합니다

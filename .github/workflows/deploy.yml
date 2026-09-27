@@ -20,11 +20,14 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+# job id 와 step id 는 GitHub Actions 스키마상 ASCII (영문자/숫자/-/_)만 허용됩니다.
+# 한글 id 를 쓰면 워크플로 전체가 "Invalid workflow file" 로 거부됩니다.
+# 사람이 보는 이름은 name: 에 한글로 쓰고, id: 는 반드시 ASCII 로 남기세요.
 jobs:
-  배포:
+  deploy:
     environment:
       name: github-pages
-      url: ${{ steps.배포단계.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: 소스 내려받기
@@ -39,5 +42,5 @@ jobs:
           path: web_version
 
       - name: Pages 에 배포
-        id: 배포단계
+        id: deployment
         uses: actions/deploy-pages@v4
