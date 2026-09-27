@@ -44,12 +44,14 @@ export function 그림판_만들기(화면캔버스, 모델캔버스, { 그리�
 
   let 그린적있나 = false;
   let 이전점 = null;
+  let 활성포인터 = null;   // 지금 획을 그리고 있는 포인터의 id. 다른 손가락 입력은 무시합니다.
 
   function 지우기() {
     맥락_준비(화면맥락);
     맥락_준비(모델맥락);
     그린적있나 = false;
     이전점 = null;
+    활성포인터 = null;
   }
 
   /** 두 맥락에 같은 점을 찍습니다. 점 하나만 눌러도 보이게 원을 그립니다. */
@@ -106,14 +108,19 @@ export function 그림판_만들기(화면캔버스, 모델캔버스, { 그리�
   }
 
   화면캔버스.addEventListener('pointerdown', (사건) => {
+    // 이미 다른 손가락으로 획을 긋는 중이면 새 포인터는 무시합니다. (두 손가락 = 선 뒤엉킴)
+    if (활성포인터 !== null) return;
+    // 보조 포인터(멀티터치의 두 번째 이후)와 마우스 오른쪽 버튼은 그리기가 아닙니다.
+    if (!사건.isPrimary || 사건.button !== 0) return;
     사건.preventDefault();
     화면캔버스.setPointerCapture(사건.pointerId);
+    활성포인터 = 사건.pointerId;
     이전점 = 좌표(사건);
     점_찍기(이전점[0], 이전점[1]);
   });
 
   화면캔버스.addEventListener('pointermove', (사건) => {
-    if (이전점 === null) return;
+    if (이전점 === null || 사건.pointerId !== 활성포인터) return;
     사건.preventDefault();
     const 지금 = 좌표(사건);
     선분_긋기(이전점, 지금);
@@ -121,8 +128,9 @@ export function 그림판_만들기(화면캔버스, 모델캔버스, { 그리�
   });
 
   function 그리기_끝(사건) {
-    if (이전점 === null) return;
+    if (사건.pointerId !== 활성포인터) return;
     이전점 = null;
+    활성포인터 = null;
     if (화면캔버스.hasPointerCapture(사건.pointerId)) {
       화면캔버스.releasePointerCapture(사건.pointerId);
     }

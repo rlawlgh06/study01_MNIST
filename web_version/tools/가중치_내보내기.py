@@ -11,10 +11,10 @@
       각 텐서의 이름·모양·시작 위치를 적은 JSON 파일 하나입니다.
 
 실행 방법 (web_version 폴더에서):
-    python tools/가중치_내보내기.py
+    py tools/가중치_내보내기.py
 
     # 경로를 직접 지정하고 싶을 때
-    python tools/가중치_내보내기.py --가중치 ../desktop_version/mnist_cnn.pt --출력 model
+    py tools/가중치_내보내기.py --가중치 ../desktop_version/mnist_cnn.pt --출력 model
 """
 
 import argparse
@@ -155,7 +155,7 @@ def 상태사전_읽기(가중치파일: Path):
 def 내보내기(가중치파일: Path, 출력폴더: Path) -> None:
     if not 가중치파일.exists():
         print(f"[오류] 가중치 파일이 없습니다: {가중치파일}", file=sys.stderr)
-        print("      먼저 desktop_version 에서 'python train.py' 를 실행해 주세요.", file=sys.stderr)
+        print("      먼저 desktop_version 에서 'py train.py' 를 실행해 주세요.", file=sys.stderr)
         sys.exit(1)
 
     상태사전, 값덩어리_읽기 = 상태사전_읽기(가중치파일)

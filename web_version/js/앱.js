@@ -16,6 +16,7 @@ const 지우기단추 = document.getElementById('지우기단추');
 const 화면 = 화면_만들기(document.getElementById('결과'));
 
 let 텐서 = null;
+let 가중치_실패함 = false;   // 가중치 로딩이 실패한 동안은 지우기가 오류 안내를 지우면 안 됩니다.
 
 const 그림판 = 그림판_만들기(화면캔버스, 모델캔버스, {
   그리기끝나면: 인식하기,   // 데스크톱과 같이 손을 떼면 바로 인식합니다.
@@ -45,6 +46,7 @@ function 인식하기() {
 
 function 지우기() {
   그림판.지우기();
+  if (가중치_실패함) return;   // 오류 안내를 지우지 않습니다. (인식하기도 텐서가 없어 동작하지 않습니다)
   화면.초기화();
 }
 
@@ -52,6 +54,9 @@ function 지우기() {
 지우기단추.addEventListener('click', 지우기);
 
 document.addEventListener('keydown', (사건) => {
+  // Ctrl/Cmd/Alt 조합은 브라우저 단축키(복사 등)이므로 건드리지 않습니다. Shift 는 그대로 허용합니다.
+  if (사건.ctrlKey || 사건.metaKey || 사건.altKey) return;
+
   if (사건.key === 'Enter') {
     사건.preventDefault();
     인식하기();
@@ -70,6 +75,7 @@ async function 시작하기() {
     텐서 = await 가중치_불러오기('model/');
   } catch (오류) {
     화면.바쁨(false);
+    가중치_실패함 = true;
     if (오류 instanceof 가중치오류) {
       화면.오류(오류.message, 오류.안내);
     } else {

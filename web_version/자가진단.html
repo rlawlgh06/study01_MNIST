@@ -34,6 +34,23 @@
 <div id="총평" class="총평 진행">검사를 실행하는 중…</div>
 <div id="내용"></div>
 
+<script>
+// 클래식 스크립트입니다 (type="module" 아님). 아래 모듈 스크립트는 file:// 에서
+// CORS 로 막혀 아예 실행되지 않으므로, 그 안의 file:// 안내(catch 블록)도 함께
+// 죽어버립니다. 그래서 이 클래식 스크립트가 먼저 실행 여부를 확인해 안내를 띄웁니다.
+if (location.protocol === 'file:') {
+  var 안내상자 = document.createElement('div');
+  안내상자.style.cssText =
+    'background:#b71c1c;color:#fff;padding:16px 20px;margin:0 0 16px;' +
+    'font-family:"Malgun Gothic",system-ui,sans-serif;font-size:1.05rem;line-height:1.6;';
+  안내상자.innerHTML =
+    '이 페이지를 <b>file://</b> 로 열어서 스크립트가 실행되지 않습니다.<br>' +
+    'web_version 폴더에서 아래 명령으로 로컬 서버를 띄운 뒤, ' +
+    '<b>http://localhost:8000/자가진단.html</b> 주소로 다시 열어 주세요.<br>' +
+    '<code style="background:#7f0000;padding:2px 6px;border-radius:4px;">py -m http.server 8000</code>';
+  document.body.insertBefore(안내상자, document.body.firstChild);
+}
+</script>
 <script type="module">
 import { 전체검사_실행 } from './테스트/전체검사.js';
 import { 가중치_불러오기 } from './js/가중치.js';
