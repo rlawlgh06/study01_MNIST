@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자가진단 · 손글씨 숫자 인식기</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: "Malgun Gothic", system-ui, sans-serif;
+         margin: 0; padding: 24px; line-height: 1.6; }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  .안내 { color: #666; margin: 0 0 20px; font-size: .9rem; }
+  .총평 { font-size: 1.3rem; font-weight: bold; padding: 14px 18px;
+          border-radius: 8px; margin: 0 0 20px; }
+  .총평.통과 { background: #e8f5e9; color: #1b5e20; }
+  .총평.실패 { background: #ffebee; color: #b71c1c; }
+  .총평.진행 { background: #e3f2fd; color: #0d47a1; }
+  h2 { font-size: 1.05rem; margin: 22px 0 6px; }
+  table { border-collapse: collapse; width: 100%; max-width: 900px; font-size: .9rem; }
+  td { border-bottom: 1px solid #ddd; padding: 6px 8px; vertical-align: top; }
+  td.표시 { width: 2.2em; text-align: center; }
+  tr.실패 td { background: #fff5f5; }
+  tr.실패 .메시지 { color: #b71c1c; font-family: Consolas, monospace;
+                    font-size: .85rem; white-space: pre-wrap; }
+  td.시간 { width: 6em; text-align: right; color: #888; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<h1>자가진단</h1>
+<p class="안내">
+  웹 버전의 계산이 데스크톱 버전(PyTorch · PIL)과 같은 값을 내는지 고정표본으로 대조합니다.
+  <code>py -m http.server</code> 로 띄운 주소에서 열어야 합니다.
+</p>
+<div id="총평" class="총평 진행">검사를 실행하는 중…</div>
+<div id="내용"></div>
+
+<script type="module">
+import { 전체검사_실행 } from './테스트/전체검사.js';
+
+const 총평칸 = document.getElementById('총평');
+const 내용칸 = document.getElementById('내용');
+
+function 표_그리기(모음결과) {
+  const 제목 = document.createElement('h2');
+  const 실패수 = 모음결과.결과.filter((항) => !항.통과).length;
+  제목.textContent = `${모음결과.이름} — ${모음결과.결과.length - 실패수}/${모음결과.결과.length} 통과`;
+  내용칸.appendChild(제목);
+
+  const 표 = document.createElement('table');
+  for (const 항 of 모음결과.결과) {
+    const 줄 = document.createElement('tr');
+    if (!항.통과) 줄.className = '실패';
+
+    const 표시 = document.createElement('td');
+    표시.className = '표시';
+    표시.textContent = 항.통과 ? '✅' : '❌';
+    줄.appendChild(표시);
+
+    const 설명 = document.createElement('td');
+    설명.textContent = 항.설명;
+    if (!항.통과) {
+      const 메시지 = document.createElement('div');
+      메시지.className = '메시지';
+      메시지.textContent = 항.메시지;
+      설명.appendChild(메시지);
+    }
+    줄.appendChild(설명);
+
+    const 시간 = document.createElement('td');
+    시간.className = '시간';
+    시간.textContent = `${항.밀리초} ms`;
+    줄.appendChild(시간);
+
+    표.appendChild(줄);
+  }
+  내용칸.appendChild(표);
+}
+
+try {
+  const 응답 = await fetch('테스트/고정표본.json');
+  if (!응답.ok) throw new Error(`고정표본.json 을 불러올 수 없습니다 (HTTP ${응답.status})`);
+  const 고정표본 = await 응답.json();
+
+  const 결과들 = await 전체검사_실행(고정표본, null);
+  결과들.forEach(표_그리기);
+
+  const 전체 = 결과들.flatMap((모음) => 모음.결과);
+  const 실패 = 전체.filter((항) => !항.통과);
+  총평칸.className = `총평 ${실패.length === 0 ? '통과' : '실패'}`;
+  총평칸.textContent = 실패.length === 0
+    ? `전체 통과 — ${전체.length}건`
+    : `${실패.length}건 실패 / 전체 ${전체.length}건`;
+} catch (오류) {
+  총평칸.className = '총평 실패';
+  총평칸.textContent = location.protocol === 'file:'
+    ? '로컬 서버로 열어 주세요: web_version 폴더에서 py -m http.server 8000'
+    : `검사를 실행하지 못했습니다: ${오류.message}`;
+}
+</script>
+</body>
+</html>

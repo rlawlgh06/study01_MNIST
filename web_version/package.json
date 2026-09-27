@@ -1,0 +1,6 @@
+{
+  "name": "web-version",
+  "private": true,
+  "type": "module",
+  "description": "손글씨 숫자 인식 웹 버전 - 외부 의존성 없음. 이 파일은 Node 가 테스트/*.js 를 ES 모듈로 읽게 하는 표시일 뿐입니다."
+}
