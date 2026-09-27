@@ -10,3 +10,7 @@ __pycache__/
 .idea/
 Thumbs.db
 desktop.ini
+
+# Claude Code 가 만드는 격리 작업 공간
+.claude/worktrees/
+.superpowers/
