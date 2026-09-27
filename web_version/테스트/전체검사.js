@@ -13,6 +13,7 @@ import * as 전처리검사 from './전처리_검사.js';
 import * as 가중치검사 from './가중치_검사.js';
 import * as 모델검사 from './모델_검사.js';
 import * as 그림판검사 from './그림판_검사.js';
+import * as 화면검사 from './화면_검사.js';
 
 export async function 전체검사_실행(고정표본, 텐서 = null) {
   const 모음들 = [
@@ -22,6 +23,7 @@ export async function 전체검사_실행(고정표본, 텐서 = null) {
     가중치검사.만들기(텐서),
     모델검사.만들기(고정표본, 텐서),
     그림판검사.만들기(),
+    화면검사.만들기(),
   ];
 
   const 결과들 = [];

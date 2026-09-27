@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>손글씨 숫자 인식기</title>
+<link rel="stylesheet" href="css/스타일.css">
+</head>
+<body>
+
+<header class="머리">
+  <h1>손글씨 숫자 인식기</h1>
+  <p>
+    마우스나 손가락으로 숫자를 쓰면 CNN 모델이 0~9 중 무엇인지 알아맞힙니다.
+    추론은 이 브라우저 안에서 외부 라이브러리 없이 순수 자바스크립트로 이루어집니다.
+    · <a href="자가진단.html">자가진단</a>
+  </p>
+</header>
+
+<main class="판">
+  <section class="그림판칸">
+    <h2>여기에 숫자를 크게 쓰세요</h2>
+    <canvas id="화면캔버스"></canvas>
+    <canvas id="모델캔버스"></canvas>
+    <div class="단추줄">
+      <button id="인식단추" type="button">인식하기 (Enter)</button>
+      <button id="지우기단추" type="button">지우기 (C)</button>
+    </div>
+  </section>
+
+  <section id="결과"></section>
+</main>
+
+<script type="module" src="js/앱.js"></script>
+</body>
+</html>
